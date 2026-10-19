@@ -271,6 +271,27 @@ $('#logoutYes').addEventListener('click', async () => {
   toast('已退出登录');
 });
 
+const navToggle = $('#navToggle');
+const navLinks = $('#navLinks');
+function closeNavigation() {
+  navLinks.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+  navToggle.setAttribute('aria-label', '打开菜单');
+}
+navToggle.addEventListener('click', event => {
+  event.stopPropagation();
+  const open = navLinks.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', String(open));
+  navToggle.setAttribute('aria-label', open ? '关闭菜单' : '打开菜单');
+  if (open) $('a', navLinks).focus();
+});
+navLinks.addEventListener('click', event => {
+  if (event.target.closest('a')) closeNavigation();
+});
+document.addEventListener('click', event => {
+  if (!event.target.closest('.nav-in')) closeNavigation();
+});
+
 let writeStep = 1;
 const draft = { topic: null, department: null };
 const bodyInput = $('#body');
@@ -505,9 +526,16 @@ function route() {
   closeDrawer();
   if (!stage.hidden) closeMailbox();
   closeMenu();
+  closeNavigation();
   views.forEach(view => { view.hidden = view.dataset.view !== viewName; });
   $$('[data-nav]').forEach(link => {
     const active = link.dataset.nav === viewName;
+    link.classList.toggle('on', active);
+    if (active) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  $$('[data-tab]').forEach(link => {
+    const active = link.dataset.tab === viewName;
     link.classList.toggle('on', active);
     if (active) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
@@ -557,10 +585,61 @@ function observeReveals() {
   });
 }
 window.addEventListener('scroll', () => $('#nav').classList.toggle('scrolled', window.scrollY > 8), { passive: true });
+
+const journeyDetails = [
+  { title: '提交', time: '提交后可查询', desc: '选择最接近的承办部门，写清标题和问题描述。提交成功后，系统会返回一个建议编号。', points: ['提交前可修改内容', '提交后可在「我的反馈」查看记录'] },
+  { title: '受理', time: '状态可查看', desc: '平台按内部流程核对建议并转交承办部门。具体受理安排由单位当前流程确定。', points: ['建议会显示当前处理状态', '页面不承诺固定办理时限'] },
+  { title: '办理', time: '进度持续更新', desc: '承办人员更新建议状态；如有补充说明，会记录在建议详情中。', points: ['员工账号信息不会出现在承办列表接口中', '请避免在描述中写入密码或证件号'] },
+  { title: '回复', time: '查看处理结果', desc: '平台回复会保存在建议详情里，你可以通过建议编号或「我的反馈」查看。', points: ['回复内容与时间会显示在记录中', '如需进一步帮助，请联系单位公布的支持渠道'] }
+];
+const journey = $('#journey');
+const journeyDetail = $('#jdetail');
+function showJourney(index) {
+  const selected = journey.querySelector('[data-j="' + index + '"]');
+  const wasOpen = selected.getAttribute('aria-expanded') === 'true';
+  journey.querySelectorAll('[data-j]').forEach(item => {
+    const active = item === selected && !wasOpen;
+    item.setAttribute('aria-expanded', String(active));
+    item.classList.toggle('selected', active);
+  });
+  if (wasOpen) {
+    journeyDetail.hidden = true;
+    return;
+  }
+  const detail = journeyDetails[index];
+  $('#jdNum').textContent = String(index + 1).padStart(2, '0');
+  $('#jdTitle').textContent = detail.title;
+  $('#jdTime').textContent = detail.time;
+  $('#jdDesc').textContent = detail.desc;
+  const points = $('#jdPoints');
+  points.replaceChildren(...detail.points.map(text => {
+    const item = document.createElement('li');
+    item.textContent = text;
+    return item;
+  }));
+  journeyDetail.hidden = false;
+}
+journey.addEventListener('click', event => {
+  const item = event.target.closest('[data-j]');
+  if (item) showJourney(Number(item.dataset.j));
+});
+journey.addEventListener('keydown', event => {
+  if (!['Enter', ' '].includes(event.key)) return;
+  const item = event.target.closest('[data-j]');
+  if (!item) return;
+  event.preventDefault();
+  showJourney(Number(item.dataset.j));
+});
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     closeDrawer();
     closeMenu();
+    closeNavigation();
+    journeyDetail.hidden = true;
+    journey.querySelectorAll('[data-j]').forEach(item => {
+      item.setAttribute('aria-expanded', 'false');
+      item.classList.remove('selected');
+    });
     if (!$('#mxStage').hidden) closeMailbox();
   }
   if (event.key !== 'Tab') return;
@@ -605,6 +684,21 @@ function renderMailboxCard(card, index) {
     '</span><span class="mc-id">' + esc(card.id) + '</span></button></div>';
 }
 mailbox.innerHTML = mailboxCards.map(renderMailboxCard).join('');
+const mobileStrip = $('#mStrip');
+if (mobileStrip) {
+  mobileStrip.innerHTML = mailboxCards.map((card, index) => {
+    const state = card.status === 'done' ? '已回复' : '办理中';
+    const progress = card.status === 'done' ? 'done' : 'doing';
+    return '<button class="ms-card" type="button" data-index="' + index + '" aria-label="查看示例：' +
+      esc(card.title.replace('<br>', '')) + '，' + state + '"><span class="ms-no">示例 · ' + esc(card.id) +
+      '</span><span class="ms-title">' + esc(card.title.replace('<br>', ' ')) +
+      '</span><span class="ms-meta">' + state + '</span><span class="ms-bar"><i class="' + progress + '"></i></span></button>';
+  }).join('');
+  mobileStrip.addEventListener('click', event => {
+    const button = event.target.closest('.ms-card');
+    if (button) openMailbox(button);
+  });
+}
 function renderMailboxDetail(card) {
   const labels = ['提交', '受理', '办理', '回复'];
   const count = card.status === 'done' ? 4 : 3;
