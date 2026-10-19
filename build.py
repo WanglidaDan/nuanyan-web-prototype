@@ -1,12 +1,37 @@
-# Builds self-contained single-file pages into dist/ (CSS and JS inlined).
-#   dist/index.html = current v1.1 (src/), dist/v1.html = archive-v1/, dist/v2.html = archive-v2/
-import os
-ROOT=os.path.dirname(os.path.abspath(__file__)); OUT=os.path.join(ROOT,'dist')
-def inline(d):
-    d=os.path.join(ROOT,d); h=open(f'{d}/index.html',encoding='utf-8').read()
-    h=h.replace('<link rel="stylesheet" href="css/style.css">','<style>\n'+open(f'{d}/css/style.css',encoding='utf-8').read()+'\n</style>')
-    return h.replace('<script src="js/app.js"></script>','<script>\n'+open(f'{d}/js/app.js',encoding='utf-8').read()+'\n</script>')
-os.makedirs(OUT,exist_ok=True)
-for name,src in [('index.html','src'),('v1.html','archive-v1'),('v2.html','archive-v2')]:
-    open(os.path.join(OUT,name),'w',encoding='utf-8').write(inline(src))
-print('built',OUT)
+"""Build the CSP-compatible static frontend into dist/."""
+
+from pathlib import Path
+import re
+import shutil
+
+ROOT = Path(__file__).resolve().parent
+SOURCE = ROOT / "src"
+OUTPUT = ROOT / "dist"
+
+INLINE_STYLE = re.compile(r"\sstyle\s*=", re.IGNORECASE)
+INLINE_STYLE_TAG = re.compile(r"<\s*style\b", re.IGNORECASE)
+INLINE_SCRIPT = re.compile(r"<\s*script\b(?![^>]*\bsrc\s*=)[^>]*>", re.IGNORECASE)
+
+
+def validate_csp_source() -> None:
+    for html_file in SOURCE.rglob("*.html"):
+        html = html_file.read_text(encoding="utf-8")
+        if INLINE_STYLE.search(html) or INLINE_STYLE_TAG.search(html) or INLINE_SCRIPT.search(html):
+            raise SystemExit(f"CSP violation in {html_file.relative_to(ROOT)}")
+
+    js_file = SOURCE / "js" / "app.js"
+    script = js_file.read_text(encoding="utf-8")
+    if INLINE_STYLE.search(script) or re.search(r"\.style\b", script):
+        raise SystemExit("CSP violation: avoid generated style attributes and element.style updates")
+
+
+def main() -> None:
+    validate_csp_source()
+    if OUTPUT.exists():
+        shutil.rmtree(OUTPUT)
+    shutil.copytree(SOURCE, OUTPUT)
+    print(f"Built CSP-compatible frontend in {OUTPUT}")
+
+
+if __name__ == "__main__":
+    main()
