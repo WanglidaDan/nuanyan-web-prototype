@@ -8,29 +8,33 @@
 </head>
 <body>
 <a class="skip" href="#main">跳到主要内容</a>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<svg class="svg-sprite" aria-hidden="true" focusable="false">
   <symbol id="mark" viewBox="0 0 40 40"><path d="M20 4C10.6 4 4 10.3 4 18.4c0 4.6 2.2 8.6 5.7 11.2L8.4 36l6.6-3.5c1.6.4 3.2.6 5 .6 9.4 0 16-6.3 16-14.7S29.4 4 20 4z" fill="currentColor"/><path d="M14 23c4-1 8-5 10-11 1 4 0 9-4 12-2 1.5-4 1.5-6-1z" fill="#F7F3EA"/></symbol>
   <symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.3-1 .8-1 1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></symbol>
   <symbol id="close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 </svg>
 
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#/" aria-label="暖言小站 首页"><svg class="brand-mark"><use href="#mark"/></svg><span>暖言小站</span></a>
-    <nav aria-label="主导航"><ul class="nav-links">
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
+    <nav aria-label="主导航"><ul class="nav-links" id="navLinks">
       <li><a href="#/" data-nav="home">首页</a></li>
       <li><a href="#/pool" data-nav="pool">留言池</a></li>
       <li><a href="#/mine" data-nav="mine">我的反馈</a></li>
       <li><a href="#/help" data-nav="help">帮助</a></li>
     </ul></nav>
     <div class="acct">
-      <button class="chip" id="acctBtn" aria-haspopup="menu" aria-expanded="false"><span class="avatar" aria-hidden="true">王</span><span>小王</span><svg class="ic sm rot"><use href="#chev"/></svg></button>
+      <button class="chip" id="acctBtn" aria-haspopup="menu" aria-expanded="false" hidden><span class="avatar" id="acctInitial" aria-hidden="true">员</span><span id="acctName">员工</span><svg class="ic sm rot"><use href="#chev"/></svg></button>
       <div class="menu" id="acctMenu" role="menu" hidden>
-        <div class="menu-head"><b>王小明</b><span>行政部 · 工号 10328</span></div>
-        <button role="menuitem" class="menu-item" id="settingsBtn">个人设置</button>
-        <button role="menuitem" class="menu-item" id="guestToggle">切换访客视图</button>
+        <div class="menu-head"><b id="menuName">员工</b><span>已登录员工账号</span></div>
         <div class="menu-sep"></div>
         <button role="menuitem" class="menu-item danger" id="logoutBtn">退出登录</button>
         <div class="confirm" id="logoutConfirm" hidden>
@@ -38,7 +42,7 @@
           <div><button class="btn ghost xs" id="logoutNo">取消</button><button class="btn primary xs" id="logoutYes">退出</button></div>
         </div>
       </div>
-      <a class="btn primary sm" id="loginBtn" href="#/" hidden>登录</a>
+      <a class="btn primary sm" id="loginBtn" href="#/auth?mode=login">登录</a>
     </div>
   </div>
 </header>
@@ -50,9 +54,9 @@
     <div class="mesh" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
     <div class="wrap hero-in">
       <div class="hero-copy">
-        <p class="eyebrow" id="greet">早上好，小王</p>
+        <p class="eyebrow" id="greet">欢迎来到暖言小站</p>
         <h1 class="display">每一条建议，<br>都值得被认真回应。</h1>
-        <p class="lede">把工作里遇到的不便、想法与担忧写下来。我们会转给对应部门，并给你一份写明措施和时限的答复。</p>
+        <p class="lede">把工作里遇到的不便、想法与担忧写下来。建议会按单位流程转交办理，你可以随时查看处理进度与回复。</p>
         <div class="cta-row">
           <a class="btn primary lg" href="#/write">写一条建议<svg class="ic"><use href="#chev"/></svg></a>
           <a class="btn ghost lg" href="#/mine">查看我的反馈</a>
@@ -73,31 +77,40 @@
           <span class="mb-note">示例</span>
         </div>
       </div>
+      <div class="m-strip" id="mStrip" aria-label="处理流程示例"></div>
     </div>
   </div>
 
   <section class="wrap sec" aria-labelledby="flowT">
     <div class="sec-head reveal"><p class="kicker">流程透明</p><h2 id="flowT" class="h2">建议会怎样被处理</h2><p class="muted">每一步都有记录，你可以随时在「我的反馈」查看进度。</p></div>
-    <ol class="journey">
-      <li class="reveal"><span class="jn">01</span><h3>提交</h3><p>选择主题写下建议，平台自动隐去你的身份信息后归档。</p><span class="jt">即时</span></li>
-      <li class="reveal"><span class="jn">02</span><h3>受理</h3><p>平台运营核对内容，分派给对应承办部门。</p><span class="jt">2 个工作日内</span></li>
-      <li class="reveal"><span class="jn">03</span><h3>办理</h3><p>承办部门调研、讨论，制定具体措施。</p><span class="jt">一般 10 个工作日</span></li>
-      <li class="reveal"><span class="jn">04</span><h3>回复</h3><p>给出书面答复：做什么、谁来做、何时完成。</p><span class="jt">办结即通知</span></li>
+    <ol class="journey" id="journey">
+      <li class="reveal" data-j="0" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看提交步骤详情"><span class="jn">01</span><h3>提交</h3><p>选择主题并描述问题，提交后会生成建议编号。</p><span class="jt">提交后可查询</span></li>
+      <li class="reveal" data-j="1" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看受理步骤详情"><span class="jn">02</span><h3>受理</h3><p>平台按内部流程核对并转交给承办部门。</p><span class="jt">状态可查看</span></li>
+      <li class="reveal" data-j="2" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看办理步骤详情"><span class="jn">03</span><h3>办理</h3><p>承办人员记录办理状态，并在需要时补充处理说明。</p><span class="jt">进度持续更新</span></li>
+      <li class="reveal" data-j="3" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看回复步骤详情"><span class="jn">04</span><h3>回复</h3><p>平台回复会出现在建议详情中，你可以回来查看。</p><span class="jt">查看处理结果</span></li>
     </ol>
+    <div class="jdetail" id="jdetail" hidden>
+      <div class="jd-top" aria-hidden="true"></div>
+      <div class="jd-body">
+        <div class="jd-head"><span class="jd-num" id="jdNum">01</span><h3 id="jdTitle">提交</h3><span class="jd-time" id="jdTime">提交后可查询</span></div>
+        <p class="jd-desc" id="jdDesc"></p>
+        <ul class="jd-points" id="jdPoints"></ul>
+      </div>
+    </div>
   </section>
 
   <section class="wrap sec pool-teaser" aria-labelledby="poolT">
-    <div class="sec-head row reveal"><div><p class="kicker">留言池</p><h2 id="poolT" class="h2">同事之间，也可以聊聊</h2><p class="muted">分享想法、互相支招。这里的内容同事可见，不会转给部门。</p></div><a class="btn ghost" href="#/pool">去留言池<svg class="ic sm"><use href="#chev"/></svg></a></div>
+    <div class="sec-head row reveal"><div><p class="kicker">留言池 <span class="proto-tag">示例内容 · 只读</span></p><h2 id="poolT" class="h2">同事之间，也可以聊聊</h2><p class="muted">留言池服务暂未开放。以下示例仅用于预览页面，不会发布或保存留言。</p></div><a class="btn ghost" href="#/pool">查看说明<svg class="ic sm"><use href="#chev"/></svg></a></div>
     <div class="pt-grid" id="poolTeaser"></div>
   </section>
 
   <section class="sec tint" aria-labelledby="doneT">
     <div class="wrap">
-      <div class="sec-head row reveal"><div><p class="kicker">最近办结</p><h2 id="doneT" class="h2">说出来的事，正在被改变</h2></div><p class="muted small">以下为示例，用于展示答复格式</p></div>
+      <div class="sec-head row reveal"><div><p class="kicker">答复示例</p><h2 id="doneT" class="h2">一份清楚的回复会包含什么</h2></div><p class="muted small">以下为虚构示例，不代表真实工单、政策或办理时限</p></div>
       <div class="cards3">
-        <article class="rcard reveal"><div class="rtop"><span class="dept">行政部</span><span class="tag">示例</span></div><h3>早班班车 7:10 经常满员，后上车的同事只能站着</h3><div class="rbody"><p class="lbl">具体措施</p><p>自 11 月 3 日起，7:10 班次由 33 座更换为 49 座大巴，并增开 7:25 加班车。</p></div><p class="rmeta"><span>时限 · 11 月 3 日前</span><span>12 天办结</span></p></article>
-        <article class="rcard reveal"><div class="rtop"><span class="dept">IT 部</span><span class="tag">示例</span></div><h3>会议室投屏经常连不上，每次开会都要耽误几分钟</h3><div class="rbody"><p class="lbl">具体措施</p><p>3 楼至 6 楼 14 间会议室统一更换无线投屏器，并在门口张贴一页式使用说明。</p></div><p class="rmeta"><span>时限 · 10 月 31 日前</span><span>8 天办结</span></p></article>
-        <article class="rcard reveal"><div class="rtop"><span class="dept">人力资源部</span><span class="tag">示例</span></div><h3>年假余额只能问 HR，希望能自己随时查到</h3><div class="rbody"><p class="lbl">具体措施</p><p>员工自助系统上线「假期余额」页面，实时显示年假、调休剩余天数。</p></div><p class="rmeta"><span>时限 · 11 月 15 日前</span><span>9 天办结</span></p></article>
+        <article class="rcard reveal"><div class="rtop"><span class="dept">示例建议</span><span class="tag">虚构内容</span></div><h3>公共区域的设备出现故障，影响日常使用</h3><div class="rbody"><p class="lbl">回复示例</p><p>已记录问题并转交相关维护人员，处理完成后会在建议详情中更新结果。</p></div><p class="rmeta"><span>办理进度会在详情中展示</span></p></article>
+        <article class="rcard reveal"><div class="rtop"><span class="dept">示例建议</span><span class="tag">虚构内容</span></div><h3>现有流程不够清楚，新同事不容易找到办理入口</h3><div class="rbody"><p class="lbl">回复示例</p><p>已确认负责部门，并补充了流程说明与联系渠道。</p></div><p class="rmeta"><span>具体安排以实际回复为准</span></p></article>
+        <article class="rcard reveal"><div class="rtop"><span class="dept">示例建议</span><span class="tag">虚构内容</span></div><h3>希望可以更方便地查询相关进度</h3><div class="rbody"><p class="lbl">回复示例</p><p>建议编号可用于查询进展；新状态和平台回复会记录在「我的反馈」。</p></div><p class="rmeta"><span>页面示例，不构成服务承诺</span></p></article>
       </div>
     </div>
   </section>
@@ -113,18 +126,19 @@
         <li data-s="2"><span class="dot">2</span>写下建议</li><li class="bar"></li>
         <li data-s="3"><span class="dot">3</span>确认提交</li>
       </ol>
-      <span class="save-note">草稿仅保存在本机</span>
+      <span class="save-note">未提交内容仅在当前页面保留</span>
     </div>
     <div class="panel">
       <div class="stage" data-step="1">
         <h1 class="h2">这条建议和哪方面有关？</h1>
-        <p class="muted">不确定也没关系，选「其他」，平台会帮你分派。</p>
+        <p class="muted">请选择最接近的承办部门；不确定时先选综合办公室，并在描述中说明情况。</p>
         <div class="topics" role="radiogroup" aria-label="主题">
-          <button class="topic" role="radio" aria-checked="false" data-t="人事与薪酬" data-d="人力资源部"><span class="ti t1"></span><b>人事与薪酬</b><span>考勤、假期、薪资、培训与晋升</span><em>由 人力资源部 承办</em></button>
-          <button class="topic" role="radio" aria-checked="false" data-t="行政与食堂班车" data-d="行政部"><span class="ti t2"></span><b>行政与食堂班车</b><span>食堂菜品、班车线路、办公环境</span><em>由 行政部 承办</em></button>
-          <button class="topic" role="radio" aria-checked="false" data-t="IT与设备" data-d="IT 部"><span class="ti t3"></span><b>IT 与设备</b><span>电脑、网络、账号、会议室设备</span><em>由 IT 部 承办</em></button>
-          <button class="topic" role="radio" aria-checked="false" data-t="安全与环境" data-d="安全环保部"><span class="ti t4"></span><b>安全与环境</b><span>生产安全、消防、隐患与职业健康</span><em>由 安全环保部 承办</em></button>
-          <button class="topic" role="radio" aria-checked="false" data-t="其他／不确定" data-d="平台运营组"><span class="ti t5"></span><b>其他／不确定</b><span>流程、制度，或拿不准归谁管的事</span><em>由 平台运营组 分派</em></button>
+          <button class="topic" role="radio" aria-checked="false" data-t="行政与公共服务" data-d="综合办公室"><span class="ti t1"></span><b>行政与公共服务</b><span>食堂、班车、办公环境及综合事务</span><em>由 综合办公室 承办</em></button>
+          <button class="topic" role="radio" aria-checked="false" data-t="人事与薪酬" data-d="人事部"><span class="ti t2"></span><b>人事与薪酬</b><span>考勤、假期、薪酬、培训与晋升</span><em>由 人事部 承办</em></button>
+          <button class="topic" role="radio" aria-checked="false" data-t="运行与设备" data-d="运行管理部"><span class="ti t3"></span><b>运行与设备</b><span>生产运行、业务流程与设备协同</span><em>由 运行管理部 承办</em></button>
+          <button class="topic" role="radio" aria-checked="false" data-t="经营与采购" data-d="经营管理部"><span class="ti t4"></span><b>经营与采购</b><span>经营管理、采购、成本与资源配置</span><em>由 经营管理部 承办</em></button>
+          <button class="topic" role="radio" aria-checked="false" data-t="档案服务" data-d="电子档案管理中心"><span class="ti t5"></span><b>档案服务</b><span>档案数字化、归档、查档与利用</span><em>由 电子档案管理中心 承办</em></button>
+          <button class="topic" role="radio" aria-checked="false" data-t="后勤与生活服务" data-d="综合服务中心"><span class="ti t6"></span><b>后勤与生活服务</b><span>园区服务、后勤保障与生活配套</span><em>由 综合服务中心 承办</em></button>
         </div>
       </div>
       <div class="stage" data-step="2" hidden>
@@ -132,10 +146,10 @@
         <p class="muted">写清楚「在哪里、发生了什么、希望怎样改善」，更容易被快速办理。</p>
         <div class="field"><label for="ttl">标题</label><input id="ttl" maxlength="40" placeholder="一句话概括，例如：早班班车经常满员"></div>
         <div class="field"><label for="body">详细描述</label>
-          <textarea id="body" maxlength="500" rows="5" aria-describedby="bodyHint" placeholder="发生的时间、地点、影响，以及你的想法……"></textarea>
-          <div class="field-foot"><span id="bodyHint" class="hint">至少 10 个字</span><span class="count" id="count">0/500</span></div>
+          <textarea id="body" maxlength="450" rows="5" aria-describedby="bodyHint" placeholder="发生的时间、地点、影响，以及你的想法……"></textarea>
+          <div class="field-foot"><span id="bodyHint" class="hint">至少 10 个字</span><span class="count" id="count">0/450</span></div>
         </div>
-        <div class="attach" tabindex="0" role="button" aria-label="添加附件（可选）"><span class="plus">＋</span><div><b>添加图片或文件（可选）</b><span>支持 JPG、PNG、PDF，单个不超过 10MB。上传前会自动清除照片位置信息。</span></div></div>
+        <p class="attach-note">当前暂不支持附件，请勿在建议正文中填写密码、证件号等敏感信息。</p>
       </div>
       <div class="stage" data-step="3" hidden>
         <h1 class="h2">确认一下，就可以提交了</h1>
@@ -150,9 +164,9 @@
       <div class="stage success" data-step="4" hidden>
         <div class="burst" aria-hidden="true"><svg viewBox="0 0 120 120"><circle class="ring" cx="60" cy="60" r="44"/><path class="tick" d="M40 61l14 14 28-30"/></svg><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <h1 class="h2">已收到，谢谢你愿意说出来</h1>
-        <p class="muted">我们会在 2 个工作日内受理，有进展会通过站内消息告诉你。</p>
-        <div class="idbox"><span>建议编号</span><b id="sid">NY-20261019-008</b></div>
-        <div class="cta-row center"><a class="btn primary lg" href="#/mine?open=NY-20261019-008">查看进度</a><a class="btn ghost lg" href="#/">回到首页</a></div>
+        <p class="muted">建议已写入系统。你可以在「我的反馈」查看进度与平台回复。</p>
+        <div class="idbox"><span>建议编号</span><b id="sid"></b></div>
+        <div class="cta-row center"><a class="btn primary lg" id="successMine" href="#/mine">查看进度</a><a class="btn ghost lg" href="#/">回到首页</a></div>
       </div>
       <div class="panel-foot" id="pfoot">
         <button class="btn ghost" id="prevBtn">上一步</button>
@@ -167,24 +181,14 @@
 <section class="view" data-view="pool" hidden>
   <div class="wrap pool">
     <div class="pool-head">
-      <div><p class="kicker">留言池 <span class="proto-tag">原型示例，内容不会保存</span></p>
+      <div><p class="kicker">留言池 <span class="proto-tag">示例内容 · 只读</span></p>
       <h1 class="h2">同事之间的小广场</h1>
-      <p class="muted lead2">分享想法、互相支招。这里的留言<b>同事都能看到</b>；需要部门处理的问题，请走正式建议。</p></div>
+      <p class="muted lead2">留言池尚未接入发布和审核服务。此处只展示明确标记的示例；需要处理的问题，请提交正式建议。</p></div>
       <a class="pool-cta" href="#/write"><span>要正式提交给部门？</span><b>写一条建议</b><svg class="ic sm"><use href="#chev"/></svg></a>
     </div>
     <div class="pool-grid">
       <div class="pool-main">
-        <form class="composer" id="composer" autocomplete="off">
-          <label class="sr" for="pcText">写点什么</label>
-          <textarea id="pcText" maxlength="200" rows="3" placeholder="想和同事聊点什么？比如一个好用的小技巧、一家不错的午餐店……"></textarea>
-          <div class="cp-row">
-            <label class="sr" for="pcTopic">话题</label>
-            <select id="pcTopic"><option>工作技巧</option><option>生活服务</option><option>活动组织</option><option>闲聊</option></select>
-            <label class="switch"><input type="checkbox" id="pcAnon" checked><span class="sw" aria-hidden="true"></span><span>匿名发布</span><em id="pcAlias">将显示为「匿名·小松鼠」</em></label>
-            <span class="cp-count" id="pcCount">0/200</span>
-            <button class="btn primary sm" id="pcSend" type="submit" disabled>发布</button>
-          </div>
-        </form>
+        <p class="pool-notice">留言池尚未接入正式发布与审核接口。此处仅供浏览示例，不会保存留言、点赞或回复。</p>
         <div class="pool-bar">
           <div class="chips" role="tablist" aria-label="话题筛选">
             <button class="chipf on" role="tab" aria-selected="true" data-t="全部">全部</button><button class="chipf" role="tab" aria-selected="false" data-t="工作技巧">工作技巧</button><button class="chipf" role="tab" aria-selected="false" data-t="生活服务">生活服务</button><button class="chipf" role="tab" aria-selected="false" data-t="活动组织">活动组织</button><button class="chipf" role="tab" aria-selected="false" data-t="闲聊">闲聊</button>
@@ -198,10 +202,10 @@
         <ol>
           <li><b>友善表达</b>就事论事，尊重不同意见。</li>
           <li><b>不涉及个人</b>不写真实姓名、工号、联系方式，不做人身攻击。</li>
-          <li><b>举报会被审核</b>被举报的内容由管理员审核，违规将被移除。</li>
-          <li><b>匿名也守规则</b>匿名只对同事隐藏身份，同样适用本公约。</li>
+          <li><b>示例内容</b>本页内容不代表真实同事发言，也不会进入管理端。</li>
+          <li><b>只读示例</b>留言池暂不支持发布、互动或举报。</li>
         </ol>
-        <p class="rules-note">需要部门给出答复的问题，请<a href="#/write">写一条建议</a>，会有专人跟进。</p>
+        <p class="rules-note">需要部门处理的问题，请<a href="#/write">写一条建议</a>；办理进度和回复会显示在「我的反馈」。</p>
       </aside>
     </div>
   </div>
@@ -213,7 +217,44 @@
     <div class="mine-head"><div><p class="kicker">我的反馈</p><h1 class="h2">你提交过的建议</h1></div>
       <div class="filters" role="tablist" aria-label="筛选"><button class="f on" data-f="all" role="tab" aria-selected="true">全部</button><button class="f" data-f="待受理" role="tab">待受理</button><button class="f" data-f="办理中" role="tab">办理中</button><button class="f" data-f="已回复" role="tab">已回复</button></div>
     </div>
+    <p class="mine-state" id="mineState" role="status" aria-live="polite">正在读取你的反馈…</p>
     <ul class="flist" id="flist"></ul>
+  </div>
+</section>
+
+<!-- AUTH -->
+<section class="view" data-view="auth" hidden>
+  <div class="wrap auth-wrap">
+    <a class="back" href="#/"><svg class="ic sm flip"><use href="#chev"/></svg>返回首页</a>
+    <section class="auth-card" aria-labelledby="authTitle">
+      <p class="kicker">员工账号</p><h1 class="h2" id="authTitle">登录暖言小站</h1>
+      <p class="muted auth-intro">登录后可提交建议并查看办理进度。</p>
+      <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
+      <form class="auth-form" id="loginForm" autocomplete="on">
+        <div class="field"><label for="loginUsername">账号</label><input id="loginUsername" name="username" autocomplete="username" required maxlength="64"></div>
+        <div class="field"><label for="loginPassword">密码</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required maxlength="256"></div>
+        <button class="btn primary auth-submit" type="submit">登录</button>
+        <div class="auth-links"><a href="#/auth?mode=register">创建员工账号</a><a href="#/auth?mode=reset">忘记密码</a></div>
+      </form>
+      <form class="auth-form" id="registerForm" autocomplete="on" hidden>
+        <div class="field"><label for="registerName">称呼</label><input id="registerName" name="display_name" autocomplete="name" maxlength="80"></div>
+        <div class="field"><label for="registerUsername">账号（4–32 位字母、数字或下划线）</label><input id="registerUsername" name="username" autocomplete="username" minlength="4" maxlength="32" pattern="[A-Za-z][A-Za-z0-9_]{3,31}" required></div>
+        <div class="field"><label for="registerEmail">单位邮箱</label><input id="registerEmail" name="email" type="email" autocomplete="email" maxlength="254" required></div>
+        <div class="field"><label for="registerPassword">密码（至少 12 位，含大小写字母、数字和符号）</label><input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></div>
+        <div class="field"><label for="registerCode">邮箱验证码</label><div class="code-row"><input id="registerCode" name="verification_code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required><button class="btn ghost" id="sendRegisterCode" type="button">发送验证码</button></div></div>
+        <button class="btn primary auth-submit" type="submit">创建账号</button>
+        <p class="auth-links"><a href="#/auth?mode=login">已有账号？登录</a></p>
+      </form>
+      <form class="auth-form" id="resetForm" autocomplete="on" hidden>
+        <p class="muted">填写账号与单位邮箱，获取验证码后设置新密码。</p>
+        <div class="field"><label for="resetUsername">账号</label><input id="resetUsername" name="username" autocomplete="username" required maxlength="64"></div>
+        <div class="field"><label for="resetEmail">单位邮箱</label><input id="resetEmail" name="email" type="email" autocomplete="email" required maxlength="254"></div>
+        <div class="field"><label for="resetCode">邮箱验证码</label><div class="code-row"><input id="resetCode" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required><button class="btn ghost" id="sendResetCode" type="button">发送验证码</button></div></div>
+        <div class="field"><label for="resetPassword">新密码（至少 12 位）</label><input id="resetPassword" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></div>
+        <button class="btn primary auth-submit" type="submit">重置密码</button>
+        <p class="auth-links"><a href="#/auth?mode=login">返回登录</a></p>
+      </form>
+    </section>
   </div>
 </section>
 
@@ -224,16 +265,16 @@
     <div class="help-grid">
       <article id="privacy" class="doc">
         <h2>隐私说明</h2>
-        <h3>我们保存什么</h3><p>你提交的标题、描述和附件，以及你的账号与该建议的关联关系。关联关系只用于让你在「我的反馈」中查看进度、接收通知。</p>
-        <h3>谁能看到什么</h3><p>承办部门只能看到建议内容与编号，看不到你的姓名、账号、邮箱或部门。平台运营组两名管理员可在审计需要时查看关联关系，每次查看都会留下不可删除的日志。</p>
+        <h3>我们保存什么</h3><p>系统保存员工账号、邮箱、密码的安全摘要、登录会话，以及建议内容、状态和平台回复，用于账号验证与本人查询。目前不支持上传附件。</p>
+        <h3>谁能看到什么</h3><p>员工只能查询自己的建议。管理端工单列表不返回员工账号或邮箱；有权限的管理员可以查看建议内容并办理。请不要在正文中填写密码、证件号或不必要的身份信息。</p>
         <h3>请注意</h3><p>如果描述中写了能识别你的细节（如具体工位、只有你知道的事），承办部门仍可能推测出身份。提交前请自行检查。</p>
-        <h3>保存期限</h3><p>建议办结满 2 年后，账号关联将被删除，建议内容以匿名形式保留用于统计。</p>
+        <h3>保存期限</h3><p>数据保存期限需由单位管理制度明确并对员工公示；部署负责人应在正式开放前补充具体期限和管理员范围。</p>
       </article>
       <div class="faq">
-        <details open><summary>多久能收到答复？</summary><p>2 个工作日内受理，一般 10 个工作日内给出答复。复杂问题会先回复办理计划。</p></details>
-        <details><summary>对答复不满意怎么办？</summary><p>在详情页点击「继续反馈」，建议会重新进入办理，并抄送平台运营组。</p></details>
-        <details><summary>可以撤回建议吗？</summary><p>受理前可以随时撤回；受理后可申请关闭。</p></details>
-        <details><summary>紧急安全隐患怎么报？</summary><p>请立即拨打安全值班电话 8110。本平台不适合处理需要即刻响应的事项。</p></details>
+        <details open><summary>多久能收到答复？</summary><p>具体受理与办理时限按单位当前流程执行。建议状态和平台回复会显示在「我的反馈」。</p></details>
+        <details><summary>对答复不满意怎么办？</summary><p>当前版本暂不支持在页面内追加反馈，请联系单位平台运营组并提供建议编号。</p></details>
+        <details><summary>可以撤回建议吗？</summary><p>当前版本暂不支持自行撤回。提交前请核对内容；确需撤回时，请联系单位平台运营组并提供建议编号。</p></details>
+        <details id="support"><summary>紧急事项或需要联系谁？</summary><p>本页面未配置单位联系电话。紧急安全事项请使用单位公布的值班电话，本平台不适合处理需要即刻响应的问题。</p></details>
       </div>
     </div>
   </div>
@@ -244,7 +285,7 @@
   <div class="wrap foot-in">
     <div class="brand sm"><svg class="brand-mark"><use href="#mark"/></svg><span>暖言小站</span></div>
     <p class="muted small">员工建议平台 · 由平台运营组维护</p>
-    <nav aria-label="页脚"><a href="#/help" data-scroll="privacy">隐私说明</a><a href="#/help">帮助</a><a href="mailto:nuanyan@example.com">联系我们</a></nav>
+    <nav aria-label="页脚"><a href="#/help" data-scroll="privacy">隐私说明</a><a href="#/help">帮助</a><a href="#/help" data-scroll="support">联系信息</a></nav>
   </div>
 </footer>
 
@@ -261,6 +302,14 @@
   </article>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<nav class="tabbar" aria-label="底部导航">
+  <a href="#/" data-tab="home"><svg class="ic"><use href="#home"/></svg><span>首页</span></a>
+  <a href="#/pool" data-tab="pool"><svg class="ic"><use href="#chat"/></svg><span>留言池</span></a>
+  <a href="#/write" data-tab="write" class="tab-write"><svg class="ic"><use href="#pen"/></svg><span>写建议</span></a>
+  <a href="#/mine" data-tab="mine"><svg class="ic"><use href="#user"/></svg><span>我的</span></a>
+  <a href="#/help" data-tab="help"><svg class="ic"><use href="#help"/></svg><span>帮助</span></a>
+</nav>
 <script src="js/app.js"></script>
 </body>
 </html>
+
