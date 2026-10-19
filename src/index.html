@@ -13,13 +13,19 @@
   <symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.3-1 .8-1 1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></symbol>
   <symbol id="close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 </svg>
 
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#/" aria-label="暖言小站 首页"><svg class="brand-mark"><use href="#mark"/></svg><span>暖言小站</span></a>
-    <nav aria-label="主导航"><ul class="nav-links">
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
+    <nav aria-label="主导航"><ul class="nav-links" id="navLinks">
       <li><a href="#/" data-nav="home">首页</a></li>
       <li><a href="#/pool" data-nav="pool">留言池</a></li>
       <li><a href="#/mine" data-nav="mine">我的反馈</a></li>
@@ -50,7 +56,7 @@
       <div class="hero-copy">
         <p class="eyebrow" id="greet">欢迎来到暖言小站</p>
         <h1 class="display">每一条建议，<br>都值得被认真回应。</h1>
-        <p class="lede">把工作里遇到的不便、想法与担忧写下来。我们会转给对应部门，并给你一份写明措施和时限的答复。</p>
+        <p class="lede">把工作里遇到的不便、想法与担忧写下来。建议会按单位流程转交办理，你可以随时查看处理进度与回复。</p>
         <div class="cta-row">
           <a class="btn primary lg" href="#/write">写一条建议<svg class="ic"><use href="#chev"/></svg></a>
           <a class="btn ghost lg" href="#/mine">查看我的反馈</a>
@@ -71,31 +77,40 @@
           <span class="mb-note">示例</span>
         </div>
       </div>
+      <div class="m-strip" id="mStrip" aria-label="处理流程示例"></div>
     </div>
   </div>
 
   <section class="wrap sec" aria-labelledby="flowT">
     <div class="sec-head reveal"><p class="kicker">流程透明</p><h2 id="flowT" class="h2">建议会怎样被处理</h2><p class="muted">每一步都有记录，你可以随时在「我的反馈」查看进度。</p></div>
-    <ol class="journey">
-      <li class="reveal"><span class="jn">01</span><h3>提交</h3><p>选择主题写下建议，平台自动隐去你的身份信息后归档。</p><span class="jt">即时</span></li>
-      <li class="reveal"><span class="jn">02</span><h3>受理</h3><p>平台运营核对内容，分派给对应承办部门。</p><span class="jt">2 个工作日内</span></li>
-      <li class="reveal"><span class="jn">03</span><h3>办理</h3><p>承办部门调研、讨论，制定具体措施。</p><span class="jt">一般 10 个工作日</span></li>
-      <li class="reveal"><span class="jn">04</span><h3>回复</h3><p>给出书面答复：做什么、谁来做、何时完成。</p><span class="jt">办结即通知</span></li>
+    <ol class="journey" id="journey">
+      <li class="reveal" data-j="0" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看提交步骤详情"><span class="jn">01</span><h3>提交</h3><p>选择主题并描述问题，提交后会生成建议编号。</p><span class="jt">提交后可查询</span></li>
+      <li class="reveal" data-j="1" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看受理步骤详情"><span class="jn">02</span><h3>受理</h3><p>平台按内部流程核对并转交给承办部门。</p><span class="jt">状态可查看</span></li>
+      <li class="reveal" data-j="2" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看办理步骤详情"><span class="jn">03</span><h3>办理</h3><p>承办人员记录办理状态，并在需要时补充处理说明。</p><span class="jt">进度持续更新</span></li>
+      <li class="reveal" data-j="3" tabindex="0" role="button" aria-expanded="false" aria-controls="jdetail" aria-label="查看回复步骤详情"><span class="jn">04</span><h3>回复</h3><p>平台回复会出现在建议详情中，你可以回来查看。</p><span class="jt">查看处理结果</span></li>
     </ol>
+    <div class="jdetail" id="jdetail" hidden>
+      <div class="jd-top" aria-hidden="true"></div>
+      <div class="jd-body">
+        <div class="jd-head"><span class="jd-num" id="jdNum">01</span><h3 id="jdTitle">提交</h3><span class="jd-time" id="jdTime">提交后可查询</span></div>
+        <p class="jd-desc" id="jdDesc"></p>
+        <ul class="jd-points" id="jdPoints"></ul>
+      </div>
+    </div>
   </section>
 
   <section class="wrap sec pool-teaser" aria-labelledby="poolT">
-    <div class="sec-head row reveal"><div><p class="kicker">留言池</p><h2 id="poolT" class="h2">同事之间，也可以聊聊</h2><p class="muted">分享想法、互相支招。这里的内容同事可见，不会转给部门。</p></div><a class="btn ghost" href="#/pool">去留言池<svg class="ic sm"><use href="#chev"/></svg></a></div>
+    <div class="sec-head row reveal"><div><p class="kicker">留言池 <span class="proto-tag">示例内容 · 只读</span></p><h2 id="poolT" class="h2">同事之间，也可以聊聊</h2><p class="muted">留言池服务暂未开放。以下示例仅用于预览页面，不会发布或保存留言。</p></div><a class="btn ghost" href="#/pool">查看说明<svg class="ic sm"><use href="#chev"/></svg></a></div>
     <div class="pt-grid" id="poolTeaser"></div>
   </section>
 
   <section class="sec tint" aria-labelledby="doneT">
     <div class="wrap">
-      <div class="sec-head row reveal"><div><p class="kicker">最近办结</p><h2 id="doneT" class="h2">说出来的事，正在被改变</h2></div><p class="muted small">以下为示例，用于展示答复格式</p></div>
+      <div class="sec-head row reveal"><div><p class="kicker">答复示例</p><h2 id="doneT" class="h2">一份清楚的回复会包含什么</h2></div><p class="muted small">以下为虚构示例，不代表真实工单、政策或办理时限</p></div>
       <div class="cards3">
-        <article class="rcard reveal"><div class="rtop"><span class="dept">行政部</span><span class="tag">示例</span></div><h3>早班班车 7:10 经常满员，后上车的同事只能站着</h3><div class="rbody"><p class="lbl">具体措施</p><p>自 11 月 3 日起，7:10 班次由 33 座更换为 49 座大巴，并增开 7:25 加班车。</p></div><p class="rmeta"><span>时限 · 11 月 3 日前</span><span>12 天办结</span></p></article>
-        <article class="rcard reveal"><div class="rtop"><span class="dept">IT 部</span><span class="tag">示例</span></div><h3>会议室投屏经常连不上，每次开会都要耽误几分钟</h3><div class="rbody"><p class="lbl">具体措施</p><p>3 楼至 6 楼 14 间会议室统一更换无线投屏器，并在门口张贴一页式使用说明。</p></div><p class="rmeta"><span>时限 · 10 月 31 日前</span><span>8 天办结</span></p></article>
-        <article class="rcard reveal"><div class="rtop"><span class="dept">人力资源部</span><span class="tag">示例</span></div><h3>年假余额只能问 HR，希望能自己随时查到</h3><div class="rbody"><p class="lbl">具体措施</p><p>员工自助系统上线「假期余额」页面，实时显示年假、调休剩余天数。</p></div><p class="rmeta"><span>时限 · 11 月 15 日前</span><span>9 天办结</span></p></article>
+        <article class="rcard reveal"><div class="rtop"><span class="dept">示例建议</span><span class="tag">虚构内容</span></div><h3>公共区域的设备出现故障，影响日常使用</h3><div class="rbody"><p class="lbl">回复示例</p><p>已记录问题并转交相关维护人员，处理完成后会在建议详情中更新结果。</p></div><p class="rmeta"><span>办理进度会在详情中展示</span></p></article>
+        <article class="rcard reveal"><div class="rtop"><span class="dept">示例建议</span><span class="tag">虚构内容</span></div><h3>现有流程不够清楚，新同事不容易找到办理入口</h3><div class="rbody"><p class="lbl">回复示例</p><p>已确认负责部门，并补充了流程说明与联系渠道。</p></div><p class="rmeta"><span>具体安排以实际回复为准</span></p></article>
+        <article class="rcard reveal"><div class="rtop"><span class="dept">示例建议</span><span class="tag">虚构内容</span></div><h3>希望可以更方便地查询相关进度</h3><div class="rbody"><p class="lbl">回复示例</p><p>建议编号可用于查询进展；新状态和平台回复会记录在「我的反馈」。</p></div><p class="rmeta"><span>页面示例，不构成服务承诺</span></p></article>
       </div>
     </div>
   </section>
@@ -168,7 +183,7 @@
     <div class="pool-head">
       <div><p class="kicker">留言池 <span class="proto-tag">示例内容 · 只读</span></p>
       <h1 class="h2">同事之间的小广场</h1>
-      <p class="muted lead2">分享想法、互相支招。这里的留言<b>同事都能看到</b>；需要部门处理的问题，请走正式建议。</p></div>
+      <p class="muted lead2">留言池尚未接入发布和审核服务。此处只展示明确标记的示例；需要处理的问题，请提交正式建议。</p></div>
       <a class="pool-cta" href="#/write"><span>要正式提交给部门？</span><b>写一条建议</b><svg class="ic sm"><use href="#chev"/></svg></a>
     </div>
     <div class="pool-grid">
@@ -188,9 +203,9 @@
           <li><b>友善表达</b>就事论事，尊重不同意见。</li>
           <li><b>不涉及个人</b>不写真实姓名、工号、联系方式，不做人身攻击。</li>
           <li><b>示例内容</b>本页内容不代表真实同事发言，也不会进入管理端。</li>
-          <li><b>匿名也守规则</b>匿名只对同事隐藏身份，同样适用本公约。</li>
+          <li><b>只读示例</b>留言池暂不支持发布、互动或举报。</li>
         </ol>
-        <p class="rules-note">需要部门给出答复的问题，请<a href="#/write">写一条建议</a>，会有专人跟进。</p>
+        <p class="rules-note">需要部门处理的问题，请<a href="#/write">写一条建议</a>；办理进度和回复会显示在「我的反馈」。</p>
       </aside>
     </div>
   </div>
@@ -256,7 +271,7 @@
         <h3>保存期限</h3><p>数据保存期限需由单位管理制度明确并对员工公示；部署负责人应在正式开放前补充具体期限和管理员范围。</p>
       </article>
       <div class="faq">
-        <details open><summary>多久能收到答复？</summary><p>2 个工作日内受理，一般 10 个工作日内给出答复。复杂问题会先回复办理计划。</p></details>
+        <details open><summary>多久能收到答复？</summary><p>具体受理与办理时限按单位当前流程执行。建议状态和平台回复会显示在「我的反馈」。</p></details>
         <details><summary>对答复不满意怎么办？</summary><p>当前版本暂不支持在页面内追加反馈，请联系单位平台运营组并提供建议编号。</p></details>
         <details><summary>可以撤回建议吗？</summary><p>当前版本暂不支持自行撤回。提交前请核对内容；确需撤回时，请联系单位平台运营组并提供建议编号。</p></details>
         <details id="support"><summary>紧急事项或需要联系谁？</summary><p>本页面未配置单位联系电话。紧急安全事项请使用单位公布的值班电话，本平台不适合处理需要即刻响应的问题。</p></details>
@@ -287,6 +302,13 @@
   </article>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<nav class="tabbar" aria-label="底部导航">
+  <a href="#/" data-tab="home"><svg class="ic"><use href="#home"/></svg><span>首页</span></a>
+  <a href="#/pool" data-tab="pool"><svg class="ic"><use href="#chat"/></svg><span>留言池</span></a>
+  <a href="#/write" data-tab="write" class="tab-write"><svg class="ic"><use href="#pen"/></svg><span>写建议</span></a>
+  <a href="#/mine" data-tab="mine"><svg class="ic"><use href="#user"/></svg><span>我的</span></a>
+  <a href="#/help" data-tab="help"><svg class="ic"><use href="#help"/></svg><span>帮助</span></a>
+</nav>
 <script src="js/app.js"></script>
 </body>
 </html>
